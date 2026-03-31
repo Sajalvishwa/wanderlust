@@ -6,7 +6,7 @@ require("dotenv").config({ path: "../.env" });
 const mongoose = require("mongoose");
 
 const initData = require("./data.js");
-const Listing = require("../Models/listing.js");
+const Listing = require("../models/listing.js");
 const User = require("../Models/user.js");
 
 

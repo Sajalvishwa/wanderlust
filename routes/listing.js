@@ -20,7 +20,7 @@ const validateListing = (req, res, next) => {
     next();
 };
 
-<!-- 🔍 SIMPLE DESKTOP SEARCH (BACK TO OLD STYLE) -->
+//<!-- 🔍 SIMPLE DESKTOP SEARCH (BACK TO OLD STYLE) -->
 // ================= INDEX + SEARCH (FINAL FIX) =================
 router.get("/", WrapAsync(async (req, res) => {
 
