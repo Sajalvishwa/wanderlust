@@ -1,0 +1,65 @@
+<% layout("layouts/boilerplate") %>
+
+<div class="row justify-content-center mt-5">
+  <div class="col-md-6">
+
+    <div class="card shadow-sm border-0">
+      <div class="card-body">
+
+        <!-- Heading -->
+        <h4 class="fw-bold mb-3">⭐ Add Review</h4>
+
+        <!-- Review Form -->
+        <form action="/listings/<%= listingId %>/reviews" method="POST">
+
+          <!-- Name -->
+          <div class="mb-3">
+            <label class="form-label">Your Name</label>
+            <input type="text" 
+                   name="name"
+                   class="form-control" 
+                   required>
+          </div>
+
+          <!-- Rating -->
+          <div class="mb-3">
+            <label class="form-label">Rating</label>
+            <select name="rating" class="form-select" required>
+              <option value="">Select Rating</option>
+              <option value="5">★★★★★</option>
+              <option value="4">★★★★☆</option>
+              <option value="3">★★★☆☆</option>
+              <option value="2">★★☆☆☆</option>
+              <option value="1">★☆☆☆☆</option>
+            </select>
+          </div>
+
+          <!-- Comment -->
+          <div class="mb-3">
+            <label class="form-label">Review</label>
+            <textarea name="comment" 
+                      class="form-control" 
+                      rows="3" 
+                      required></textarea>
+          </div>
+
+          <!-- Submit -->
+          <button class="btn btn-primary rounded-pill w-100">
+            Submit Review
+          </button>
+
+        </form>
+
+        <!-- Back button -->
+        <div class="mt-3 text-center">
+          <a href="/listings/<%= listingId %>" 
+             class="text-decoration-none text-muted">
+            ← Back to Listing
+          </a>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</div>

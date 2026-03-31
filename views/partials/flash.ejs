@@ -1,0 +1,17 @@
+<!-- ========================= -->
+<!-- ✅ Flash Messages UI -->
+<!-- ========================= -->
+
+<% if (success && success.length > 0) { %>
+  <div class="flash-message success">
+    <span><%= success %></span>
+    <button onclick="this.parentElement.remove()">×</button>
+  </div>
+<% } %>
+
+<% if (error && error.length > 0) { %>
+  <div class="flash-message error">
+    <span><%= error %></span>
+    <button onclick="this.parentElement.remove()">×</button>
+  </div>
+<% } %>

@@ -1,0 +1,79 @@
+<% layout("/layouts/boilerplate") %>
+
+<div class="container d-flex justify-content-center align-items-center" style="min-height: 80vh;">
+
+  <div class="card shadow p-4" style="width: 400px; border-radius: 15px;">
+    
+    <!-- Title -->
+    <h3 class="text-center mb-4 text-danger fw-bold">Sign Up</h3>
+
+    <!-- Flash Messages -->
+    <% if (error && error.length > 0) { %>
+      <div class="alert alert-danger">
+        <%= error %>
+      </div>
+    <% } %>
+
+    <% if (success && success.length > 0) { %>
+      <div class="alert alert-success">
+        <%= success %>
+      </div>
+    <% } %>
+
+    <!-- Signup Form -->
+    <form action="/signup" method="POST">
+
+      <!-- Username -->
+      <div class="mb-3">
+        <label class="form-label">Username</label>
+        <input 
+          type="text" 
+          name="username" 
+          class="form-control" 
+          placeholder="Choose username" 
+          required
+        >
+      </div>
+
+      <!-- Email -->
+      <div class="mb-3">
+        <label class="form-label">Email</label>
+        <input 
+          type="email" 
+          name="email" 
+          class="form-control" 
+          placeholder="Enter email" 
+          required
+        >
+      </div>
+
+      <!-- Password -->
+      <div class="mb-3">
+        <label class="form-label">Password</label>
+        <input 
+          type="password" 
+          name="password" 
+          class="form-control" 
+          placeholder="Create password" 
+          required
+        >
+      </div>
+
+      <!-- Button -->
+      <button class="btn btn-danger w-100 fw-bold">
+        Sign Up
+      </button>
+    </form>
+
+    <!-- Divider -->
+    <hr class="my-4">
+
+    <!-- Login Link -->
+    <p class="text-center mb-0">
+      Already have an account? 
+      <a href="/login" class="text-danger fw-bold">Login</a>
+    </p>
+
+  </div>
+
+</div>
