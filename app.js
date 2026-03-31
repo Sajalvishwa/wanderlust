@@ -1,9 +1,8 @@
 // =======================================================
 // ⚙️ ENVIRONMENT CONFIGURATION
 // =======================================================
-// Agar app production mein nahi hai, toh .env file se variables load karo
 if (process.env.NODE_ENV !== "production") {
-    require('dotenv').config();
+    require("dotenv").config();
 }
 
 const express = require("express");
@@ -12,35 +11,45 @@ const path = require("path");
 const methodOverride = require("method-override");
 const ejsMate = require("ejs-mate");
 const session = require("express-session");
-// Line 18 change karein
-const MongoStore = require("connect-mongo").default; 
-console.log("MongoStore Type:", typeof MongoStore.create); // Session store ke liye
+const MongoStore = require("connect-mongo").default; // ✅ FIXED
 const flash = require("connect-flash");
 const passport = require("passport");
 const LocalStrategy = require("passport-local");
 
-// Models & Utilities
+// Models & Utils
 const User = require("./models/user.js");
 const ExpressError = require("./utils/ExpressError");
 
-// Routes Imports
+// Routes
 const listingRoutes = require("./routes/listing");
 const reviewRoutes = require("./routes/review");
 const userRoutes = require("./routes/user");
 
-const dburl = process.env.Atlas; // Aapka MongoDB Atlas URL
+// =======================================================
+// 🛢️ DATABASE CONNECTION
+// =======================================================
+const dburl = process.env.Atlas;
 
-// =======================================================
-// 🛢️ DATABASE CONNECTION (Atlas)
-// =======================================================
+// ❌ safety check (VERY IMPORTANT)
+if (!dburl) {
+    console.log("❌ MongoDB Atlas URL missing in environment variables!");
+    process.exit(1);
+}
+
 mongoose.connect(dburl)
     .then(() => console.log("✅ MongoDB Atlas connected successfully!"))
-    .catch((err) => console.log("❌ MongoDB connection error:", err));
+    .catch((err) => {
+        console.log("❌ MongoDB connection error:", err);
+        process.exit(1);
+    });
 
+// =======================================================
+// 🚀 APP INIT
+// =======================================================
 const app = express();
 
 // =======================================================
-// 🎨 VIEW ENGINE & STATIC FILES SETUP
+// 🎨 VIEW ENGINE & STATIC FILES
 // =======================================================
 app.engine("ejs", ejsMate);
 app.set("view engine", "ejs");
@@ -52,7 +61,7 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 // =======================================================
-// 🔐 SESSION & MONGO STORE CONFIGURATION
+// 🔐 SESSION + MONGO STORE
 // =======================================================
 const store = MongoStore.create({
     mongoUrl: dburl,
@@ -62,48 +71,49 @@ const store = MongoStore.create({
     touchAfter: 24 * 3600,
 });
 
-// Store error handling
+// session store error
 store.on("error", (err) => {
-    console.log("ERROR IN MONGO SESSION STORE", err);
+    console.log("❌ SESSION STORE ERROR:", err);
 });
 
 const sessionOptions = {
-    store, // MongoStore integration
+    store,
     secret: process.env.SECRET || "mysupersecretkey",
     resave: false,
-    saveUninitialized: true,
+    saveUninitialized: false, // ✅ better than true
     cookie: {
-        expires: Date.now() + 7 * 24 * 60 * 60 * 1000, // 1 week
+        expires: Date.now() + 7 * 24 * 60 * 60 * 1000,
         maxAge: 7 * 24 * 60 * 60 * 1000,
-        httpOnly: true
-    }
+        httpOnly: true,
+    },
 };
 
 app.use(session(sessionOptions));
 app.use(flash());
 
 // =======================================================
-// 🛡️ PASSPORT AUTHENTICATION SETUP
+// 🛡️ PASSPORT CONFIG
 // =======================================================
 app.use(passport.initialize());
 app.use(passport.session());
+
 passport.use(new LocalStrategy(User.authenticate()));
 
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
 // =======================================================
-// 🌍 GLOBAL VARIABLES (Flash & User context)
+// 🌍 GLOBAL VARIABLES
 // =======================================================
 app.use((req, res, next) => {
     res.locals.success = req.flash("success");
     res.locals.error = req.flash("error");
-    res.locals.currUser = req.user; // Navbar mein user check karne ke liye
+    res.locals.currUser = req.user;
     next();
 });
 
 // =======================================================
-// 🛣️ ROUTES SETUP
+// 🛣️ ROUTES
 // =======================================================
 app.get("/", (req, res) => {
     res.redirect("/listings");
@@ -114,14 +124,15 @@ app.use("/listings/:id/reviews", reviewRoutes);
 app.use("/", userRoutes);
 
 // =======================================================
-// ⚠️ ERROR HANDLING MIDDLEWARE
+// ⚠️ 404 HANDLER
 // =======================================================
-// 404 Handler
-// Yeh har us request ko catch karega jo upar ke routes se match nahi hui
 app.use((req, res, next) => {
     next(new ExpressError(404, "Page Not Found!"));
 });
-// Global Error Handler
+
+// =======================================================
+// ❌ GLOBAL ERROR HANDLER
+// =======================================================
 app.use((err, req, res, next) => {
     let { statusCode = 500 } = err;
     if (!err.message) err.message = "Something went wrong!";
@@ -129,9 +140,10 @@ app.use((err, req, res, next) => {
 });
 
 // =======================================================
-// 🟢 START SERVER
+// 🟢 SERVER START
 // =======================================================
-const port = 8000;
+const port = process.env.PORT || 8000;
+
 app.listen(port, () => {
     console.log(`🚀 Server is running on port ${port}`);
 });
