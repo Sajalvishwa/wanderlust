@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 
-const Listing = require("../models/listing");
+const Listing = require("../Models/listing");
 const upload = require("../middleware/upload");
 
 const { isLoggedIn, isOwner } = require("../middleware");
