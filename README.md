@@ -59,9 +59,7 @@ WanderLust/
 
 1. Clone the repository
 
-```
-git clone https://github.com/your-username/wanderlust.git
-```
+
 
 2. Navigate to project folder
 
@@ -97,13 +95,8 @@ npm start
 
 The project is deployed on Render.
 You can access it here:
-👉 https://your-live-link.com
+👉 https://wanderlust-exqa.onrender.com/
 
----
-
-## 📸 Screenshots
-
-*Add screenshots of your project here*
 
 ---
 
