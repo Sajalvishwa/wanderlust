@@ -117,8 +117,8 @@ Contributions are welcome! Feel free to fork the repository and submit a pull re
 
 **Sajal Vishwakarma**
 
-* GitHub: https://github.com/your-username
-* LinkedIn: https://linkedin.com/in/your-profile
+* GitHub: https://github.com/Sajalvishwa
+* LinkedIn: https://www.linkedin.com/in/sajal-vishwakarma-b2008b27b/
 
 ---
 
